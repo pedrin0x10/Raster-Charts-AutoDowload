@@ -1108,11 +1108,15 @@ for %%a in (
 
     rem Adicione todas as URLs aqui
 ) do (
-    echo Baixando %%a
-    if "%%a"=="https://www.marinha.mil.br/chm/chm/sites/www.marinha.mil.br.chm/files/raster/*" (
-        powershell -command "Invoke-WebRequest -Uri '%%a' -OutFile '%raster_dir%\%%~nxa'"
+    echo Baixando %%a...
+    echo.
+
+    rem Determina o diretório com base no tipo do arquivo
+    echo %%a | find "raster" >nul
+    if not errorlevel 1 (
+        curl -L "%%a" -o "%raster_dir%\%%~nxa"
     ) else (
-        powershell -command "Invoke-WebRequest -Uri '%%a' -OutFile '%geotiff_dir%\%%~nxa'"
+        curl -L "%%a" -o "%geotiff_dir%\%%~nxa"
     )
 )
 echo Downloads concluídos!
